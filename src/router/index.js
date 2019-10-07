@@ -5,6 +5,7 @@ import Items from '@/components/Items'
 import Order from '@/components/Order'
 import Appointment from '@/components/Appointment'
 import Cart from '@/components/Cart'
+import Admin from '@/components/Admin'
 Vue.use(Router)
 
 export default new Router({
@@ -33,6 +34,11 @@ export default new Router({
       path: '/cart',
       name: 'Cart',
       component: Cart
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: Admin
     }
   ]
 })

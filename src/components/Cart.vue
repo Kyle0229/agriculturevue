@@ -18,27 +18,30 @@
         </el-checkbox>
       </el-table-column>
       <el-table-column
-        prop="date"
+        prop="caid"
         label="编号"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="date"
+        prop="caname"
         label="商品名称"
         width="200">
       </el-table-column>
       <el-table-column
-        prop="date"
+        prop="oaprice"
         label="单价"
         width="180">
       </el-table-column>
       <el-table-column
         label="数量"
-        width="225">
-        <el-input-number size="medium"></el-input-number>
+        width="225"
+       prop="cacount">
+        <template slot-scope="scope">
+        <el-input-number  size="medium" min="0" step="1" v-model="tableData[scope.$index].cacount"></el-input-number>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="catotalprice"
         label="总价"
         width="180">
       </el-table-column>
@@ -58,30 +61,31 @@
 <script>
   import ElCheckbox from "../../node_modules/element-ui/packages/checkbox/src/checkbox";
   import ElInputNumber from "../../node_modules/element-ui/packages/input-number/src/input-number";
+  import axios from 'axios';
   export default{
     components: {
       ElInputNumber,
       ElCheckbox},
     data(){
-          return{
-            tableData: [{
-              date: '2016-05-02',
-              name: '王小虎',
-              address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-              date: '2016-05-04',
-              name: '王小虎',
-              address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-              date: '2016-05-01',
-              name: '王小虎',
-              address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-              date: '2016-05-03',
-              name: '王小虎',
-              address: '上海市普陀区金沙江路 1516 弄'
-            }]
-          }
-      }
+
+         return {
+           tableData: [{
+             caid: "",
+             caname: "",
+             oaprice: "",
+             cacount: "1",
+             catotalprice: ""
+
+           }]
+         }
+      },
+    method(){
+
+      },
+       mounted(){
+        axios.get("api/selectCartAll").then(r=>{
+              this.tableData = r.data;
+        });
+    }
   }
 </script>
