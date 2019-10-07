@@ -9,13 +9,15 @@
     </div>
     <div style="margin-top: 20px">
     <el-table
+      ref="multipleTable"
       :data="tableData"
       border
+      tooltip-effect="dark"
+      @selection-change="handleSelectionChange"
       style="width: 100%">
       <el-table-column
-        width="50">
-        <el-checkbox>
-        </el-checkbox>
+        type="selection"
+        width="55">
       </el-table-column>
       <el-table-column
         prop="caid"

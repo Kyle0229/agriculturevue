@@ -2,29 +2,30 @@
   <div class="hello">
 
     <div class="block">
-    <el-carousel height="250px">
-      <el-carousel-item v-for="item in items" :key="item">
-        <el-image :src="item.src" fit=" contain"></el-image>
-      </el-carousel-item>
-    </el-carousel>
+      <el-carousel :interval="4000" type="card" height="200px">
+        <el-carousel-item v-for="item in items" :key="item">
+          <el-image :src="item.src" ></el-image>
+        </el-carousel-item>
+      </el-carousel>
   </div>
     <div >
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="一致性 Consistency" name="1">
-          <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-          <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
+        <el-collapse-item title="农产品   Produce" name="1">
+          <div>点击对应的产品购买或查看详情</div>
+          <div>本网站商品概不议价</div>
         </el-collapse-item>
       </el-collapse>
       <div style="margin-left: 60px">
     <el-row>
-      <el-col :span="4" v-for="(o, index) in 4" :key="o" :offset="index > 0 ? 2 : 0">
+      <el-col :span="4" v-for="(produce, index) in products" :key="o" :offset="index > 0 ? 2 : 0">
         <el-card :body-style="{ padding: '0px' }">
-          <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+          <img :src="produce.pic" class="image" style="height: 130px">
           <div style="padding: 14px;">
-            <span>好吃的汉堡</span>
+            <span>{{produce.gname}}</span>
+            <span>￥{{produce.oaprice}}</span>
             <div class="bottom clearfix">
               <time class="time">{{ currentDate }}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
+              <el-button type="text" class="button" @click="toItem(produce.gid)">购买</el-button>
             </div>
           </div>
         </el-card>
@@ -32,21 +33,22 @@
     </el-row>
       </div>
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="一致性 Consistency" name="1">
-          <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-          <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
+        <el-collapse-item title="农业工具 Tools" name="1">
+          <div>点击对应的产品购买或查看详情</div>
+          <div>本网站商品概不议价</div>
         </el-collapse-item>
       </el-collapse>
       <div style="margin-left: 60px">
       <el-row>
-        <el-col :span="4" v-for="(o, index) in 4" :key="o" :offset="index > 0 ? 2 : 0">
+        <el-col :span="4" v-for="(tool, index) in tools" :key="o" :offset="index > 0 ? 2 : 0">
           <el-card :body-style="{ padding: '0px' }">
-            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+            <img :src="tool.pic" class="image" style="height: 130px" >
             <div style="padding: 14px;">
-              <span>好吃的汉堡</span>
+              <span>{{tool.gname}}</span>
+              <span>￥{{tool.oaprice}}</span>
               <div class="bottom clearfix">
                 <time class="time">{{ currentDate }}</time>
-                <el-button type="text" class="button">操作按钮</el-button>
+                <el-button type="text" class="button" @click="toItem(tool.gid)">购买</el-button>
               </div>
             </div>
           </el-card>
@@ -54,21 +56,22 @@
       </el-row>
       </div>
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="一致性 Consistency" name="1">
-          <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-          <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
+        <el-collapse-item  title="化肥肥料 Fertilizer" name="1" >
+          <div>点击对应的产品购买或查看详情</div>
+          <div>本网站商品概不议价</div>
         </el-collapse-item>
       </el-collapse>
       <div style="margin-left: 60px">
       <el-row>
-        <el-col :span="4" v-for="(o, index) in 4" :key="o" :offset="index > 0 ? 2 : 0">
+        <el-col :span="4" v-for="(fertilizer, index) in fertilizers" :key="o" :offset="index > 0 ? 2 : 0">
           <el-card :body-style="{ padding: '0px' }">
-            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+            <img :src="fertilizer.pic" class="image" style="height: 130px">
             <div style="padding: 14px;">
-              <span>好吃的汉堡</span>
+              <span>{{fertilizer.gname}}</span>
+              <span>￥{{fertilizer.oaprice}}</span>
               <div class="bottom clearfix">
                 <time class="time">{{ currentDate }}</time>
-                <el-button type="text" class="button">操作按钮</el-button>
+                <el-button type="text" class="button" @click="toItem(fertilizer.gid)">购买</el-button>
               </div>
             </div>
           </el-card>
@@ -94,6 +97,7 @@
 
   .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
+  }
   .time {
     font-size: 13px;
     color: #999;
@@ -123,19 +127,39 @@
   .clearfix:after {
     clear: both
   }
-  }
 </style>
 <script>
+  import axios from 'axios';
 export default {
   name: 'HelloWorld',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      items:[{src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'},
-        {src:'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'},
-        {src:'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'},
-        {src:'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'}]
+      items:[{src: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1570431643567&di=e5b29e470e84792ccc3c231363bc318f&imgtype=0&src=http%3A%2F%2Fimg011.hc360.cn%2Fg3%2FM09%2F52%2FCD%2FwKhQvFKpEDSEeoTWAAAAACeFuBE479.jpg'},
+        {src:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1570432310623&di=d8087a943ce520b47110543ff22768e6&imgtype=0&src=http%3A%2F%2Fpic39.nipic.com%2F20140325%2F6608733_084924891000_2.jpg'},
+        {src:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1570431643566&di=90aed2ceec5e0bec7819249f3d5ccecc&imgtype=0&src=http%3A%2F%2Fimg06.tooopen.com%2Fimages%2F20170704%2Ftooopen_sy_215298046534.jpg'},
+        {src:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1570431643565&di=fd8bb8b28588e89f5ccd34c350d7898d&imgtype=0&src=http%3A%2F%2Fpic5.nipic.com%2F20100129%2F47541_070530057452_2.jpg'}],
+      products:[],
+      tools:[],
+      fertilizers:[],
+      currentDate: new Date()
     }
+  },
+  mounted(){
+      axios.get("api/selectAllByCid?id=1").then(r=>{
+          this.products=r.data;
+      });
+    axios.get("api/selectAllByCid?id=2").then(r=>{
+      this.tools=r.data;
+    });
+    axios.get("api/selectAllByCid?id=3").then(r=>{
+      this.fertilizers=r.data;
+    });
+  },
+  methods:{
+      toItem:function (gid) {
+        this.$router.push("/item/"+gid);
+      }
   }
 }
 </script>

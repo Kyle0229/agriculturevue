@@ -8,7 +8,7 @@
     </div>
     <div class="demo-image__placeholder" style="margin-left: 40px;float: left;margin-top: 20px;">
       <div class="block">
-        <el-image :src="src" style="width: 600px;height: 400px">
+        <el-image :src="goods.pic" style="width: 400px;height: 300px">
           <div slot="placeholder" class="image-slot">
             加载中<span class="dot">...</span>
           </div>
@@ -27,7 +27,7 @@
       <el-row>
         <el-button type="info" @click="toAppointment()" round>预约交易</el-button>
         <el-button type="info" @click="toCart()" round>立即购买</el-button>
-        <el-button type="info" round>添加购物车</el-button>
+        <el-button type="info" @click="addCart()" round>添加购物车</el-button>
       </el-row>
       </div>
     </div>
@@ -48,6 +48,7 @@ export default {
           gid:"",
           gname:"",
           oaprice:"",
+          pic:"",
 
           info:""
       },
@@ -65,11 +66,17 @@ export default {
         },
         toCart:function () {
           this.$router.push("/cart")
+        },
+        addCart:function () {
+         axios.get("/addCart?id="+this.goods.gid).then(r=>{
+             alert(r.data);
+         });
         }
 
     },
   mounted(){
-       axios.post("api/selectOne",{"gid":1}).then(r=>{
+//      alert(this.$route.params.id);
+       axios.post("api/selectOne",{"gid":this.$route.params.id}).then(r=>{
               this.goods = r.data;
        });
   }
