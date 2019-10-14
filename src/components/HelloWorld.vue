@@ -1,46 +1,55 @@
 <template>
   <div class="hello">
-
-    <div class="block">
+    <Header></Header>
+    <div class="block" >
       <el-carousel :interval="4000" type="card" height="200px">
         <el-carousel-item v-for="item in items" :key="item">
           <el-image :src="item.src" ></el-image>
         </el-carousel-item>
       </el-carousel>
   </div>
-    <div >
-      <el-collapse v-model="activeNames" @change="handleChange">
+    <div>
+      <el-collapse  @change="handleChange">
         <el-collapse-item title="农产品   Produce" name="1">
           <div>点击对应的产品购买或查看详情</div>
           <div>本网站商品概不议价</div>
         </el-collapse-item>
+
       </el-collapse>
-      <div style="margin-left: 60px">
-    <el-row>
-      <el-col :span="4" v-for="(produce, index) in products" :key="o" :offset="index > 0 ? 2 : 0">
-        <el-card :body-style="{ padding: '0px' }">
-          <img :src="produce.pic" class="image" style="height: 130px">
-          <div style="padding: 14px;">
-            <span>{{produce.gname}}</span>
-            <span>￥{{produce.oaprice}}</span>
-            <div class="bottom clearfix">
-              <time class="time">{{ currentDate }}</time>
-              <el-button type="text" class="button" @click="toItem(produce.gid)">购买</el-button>
-            </div>
+      <el-carousel  arrow="hover" loop="false" autoplay="false" interval="0" indicator-position="none">
+        <el-carousel-item v-for="(item,i) in productsize" :key="item" style="background-color: white;text-align: center" >
+          <div style="margin-left: 80px;margin-top: 40px">
+            <el-row>
+              <el-col :span="4" v-for="(produce, index) in products.slice(4*(i+1)-4,4*(i+1))" :key="o" :offset="index > 0 ? 2 : 0">
+                <el-card :body-style="{ padding: '0px' }">
+                  <img :src="produce.pic" class="image" style="height: 130px">
+                  <div style="padding: 14px;">
+                    <span>{{produce.gname}}</span>
+                    <span>￥{{produce.oaprice}}</span>
+                    <div class="bottom clearfix">
+                      <time class="time">{{ currentDate }}</time>
+                      <el-button type="text" class="button" @click="toItem(produce.gid)">购买</el-button>
+                    </div>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
           </div>
-        </el-card>
-      </el-col>
-    </el-row>
-      </div>
+        </el-carousel-item>
+      </el-carousel>
+
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="农业工具 Tools" name="1">
           <div>点击对应的产品购买或查看详情</div>
           <div>本网站商品概不议价</div>
         </el-collapse-item>
       </el-collapse>
-      <div style="margin-left: 60px">
+
+      <el-carousel  arrow="hover" loop="false" autoplay="false" interval="0" indicator-position="none">
+        <el-carousel-item v-for="(item,i) in toolsize" :key="item" style="background-color: white;text-align: center" >
+      <div style="margin-left: 80px;margin-top: 40px">
       <el-row>
-        <el-col :span="4" v-for="(tool, index) in tools" :key="o" :offset="index > 0 ? 2 : 0">
+        <el-col :span="4" v-for="(tool, index) in tools.slice(4*(i+1)-4,4*(i+1))" :key="o" :offset="index > 0 ? 2 : 0">
           <el-card :body-style="{ padding: '0px' }">
             <img :src="tool.pic" class="image" style="height: 130px" >
             <div style="padding: 14px;">
@@ -55,15 +64,21 @@
         </el-col>
       </el-row>
       </div>
+        </el-carousel-item>
+      </el-carousel>
+
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item  title="化肥肥料 Fertilizer" name="1" >
           <div>点击对应的产品购买或查看详情</div>
           <div>本网站商品概不议价</div>
         </el-collapse-item>
       </el-collapse>
-      <div style="margin-left: 60px">
+
+          <el-carousel  arrow="hover" loop="false" autoplay="false" interval="0" indicator-position="none">
+            <el-carousel-item v-for="(item,i) in fertilizersize" :key="item" style="background-color: white;text-align: center;" >
+      <div style="margin-left: 80px;margin-top: 40px">
       <el-row>
-        <el-col :span="4" v-for="(fertilizer, index) in fertilizers" :key="o" :offset="index > 0 ? 2 : 0">
+        <el-col :span="4" v-for="(fertilizer, index) in fertilizers.slice(4*(i+1)-4,4*(i+1))" :key="o" :offset="index > 0 ? 2 : 0">
           <el-card :body-style="{ padding: '0px' }">
             <img :src="fertilizer.pic" class="image" style="height: 130px">
             <div style="padding: 14px;">
@@ -78,6 +93,9 @@
         </el-col>
       </el-row>
       </div>
+            </el-carousel-item>
+          </el-carousel>
+
     </div>
   </div>
 </template>
@@ -129,9 +147,14 @@
   }
 </style>
 <script>
+
   import axios from 'axios';
+  import Header from './Header.vue'
 export default {
   name: 'HelloWorld',
+  components:{
+    Header
+  },
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
@@ -142,18 +165,24 @@ export default {
       products:[],
       tools:[],
       fertilizers:[],
-      currentDate: new Date()
+      currentDate: new Date(),
+      productsize:'',
+      toolsize:'',
+      fertilizersize:''
     }
   },
   mounted(){
       axios.get("api/selectAllByCid?id=1").then(r=>{
           this.products=r.data;
+          this.productsize=this.products.length%4==0?Math.floor(this.products.length/4):Math.floor(this.products.length/4+1);
       });
     axios.get("api/selectAllByCid?id=2").then(r=>{
       this.tools=r.data;
+      this.toolsize=this.tools.length%4==0?Math.floor(this.tools.length/4):Math.floor(this.tools.length/4+1);
     });
     axios.get("api/selectAllByCid?id=3").then(r=>{
       this.fertilizers=r.data;
+      this.fertilizersize=this.fertilizers.length%4==0?Math.floor(this.fertilizers.length/4):Math.floor(this.fertilizers.length/4+1);
     });
   },
   methods:{

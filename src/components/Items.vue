@@ -1,5 +1,6 @@
 <template>
   <div class="hello" >
+    <Header></Header>
     <div style="margin-top: 20px;">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -17,11 +18,13 @@
       <div>
       </div>
     </div >
-    <div style="float: left;margin-left: 40px;margin-top:20px;height: 800px;width: 500px;">
+    <div style="float: left;margin-left: 40px;margin-top:20px;height: 400px;width: 500px;">
       <div style="height: 50px;margin-top: 20px;">商品编号:<span style="margin-left: 60px">{{goods.gid}}</span></div>
       <div style="height: 50px;margin-top: 20px;">商品名称:<span style="margin-left: 60px" >{{goods.gname}}</span></div>
       <div style="height: 50px;margin-top: 20px;">商品价格:<span style="margin-left: 60px">{{goods.oaprice}}</span></div>
-      <div style="height: 50px;margin-top: 20px;">商品数量:<span style="margin-left: 60px" >{{count}}</span></div>
+      <div style="height: 50px;margin-top: 20px;">商品数量:
+        <el-input-number  size="small" min="0" step="1" v-model="count" style="margin-left: 50px" v-if="count==1"></el-input-number>
+        <el-input-number  size="small" min="1" step="1" v-model="count" style="margin-left: 50px" v-if="count!=1"></el-input-number></div>
       <div style="height: 50px;margin-top: 20px;">商品详情:<span style="margin-left: 60px" >{{goods.info}}</span></div>
       <div style="height: 50px;margin-top: 20px;text-align: center;">
       <el-row>
@@ -32,14 +35,17 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
   import axios from 'axios';
+  import Header from './Header.vue'
 export default {
 
   name: 'Items',
+  components:{
+    Header
+  },
   data () {
     return {
       msg: '这是详情页面',
@@ -49,8 +55,9 @@ export default {
           gname:"",
           oaprice:"",
           pic:"",
+          info:"",
+          sid:""
 
-          info:""
       },
       count:"1"
     }
@@ -61,22 +68,43 @@ export default {
 
         },
         toAppointment:function () {
-          this.$router.push("/appointment");
+          axios.get("api/findSession").then(r => {
+            if(r.data=='') {
+              this.$router.push("/login");
+            }else{
+              this.$router.push("/appointment/"+this.goods.sid);
+            }
+          });
+
 
         },
         toCart:function () {
-          this.$router.push("/cart")
+          axios.get("api/findSession").then(r => {
+            if(r.data=='') {
+              this.$router.push("/login");
+            }else{
+              this.$router.push("/cart")
+            }
+          });
+
         },
         addCart:function () {
-         axios.get("/addCart?id="+this.goods.gid).then(r=>{
-             alert(r.data);
-         });
+          axios.get("api/findSession").then(r => {
+            if(r.data=='') {
+              this.$router.push("/login");
+            }else{
+              axios.get("api/addCart?id="+this.goods.gid+"&num="+this.count).then(r=>{
+                alert(r.data);
+              });
+            }
+          });
+
         }
 
     },
   mounted(){
-//      alert(this.$route.params.id);
-       axios.post("api/selectOne",{"gid":this.$route.params.id}).then(r=>{
+//     alert(this.$route.params.id);
+       axios.get("api/selectGoodsOne?gid="+this.$route.params.id).then(r=>{
               this.goods = r.data;
        });
   }

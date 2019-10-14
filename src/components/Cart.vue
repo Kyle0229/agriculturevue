@@ -1,9 +1,9 @@
 <template>
   <div>
+    <Header></Header>
     <div style="margin-top: 20px;">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/item' }">商品详情</el-breadcrumb-item>
         <el-breadcrumb-item>购物车</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -39,7 +39,8 @@
         width="225"
        prop="cacount">
         <template slot-scope="scope">
-        <el-input-number  size="medium" min="0" step="1" v-model="tableData[scope.$index].cacount"></el-input-number>
+          <el-input-number  size="medium" min="0" step="1" v-model="tableData[scope.$index].cacount" v-if="tableData[scope.$index].cacount==1"></el-input-number>
+          <el-input-number  size="medium" min="1" step="1" v-model="tableData[scope.$index].cacount" v-if="tableData[scope.$index].cacount!=1"></el-input-number>
         </template>
       </el-table-column>
       <el-table-column
@@ -56,7 +57,8 @@
     </el-table>
   </div>
     <div style="margin-top: 20px;float: right;margin-right: 150px">
-    <el-button type="info" round>下订单</el-button>
+    <el-button type="info" round  disabled v-if="multipleSelection==''">下订单</el-button>
+      <el-button type="info" round @click="getOrders()" v-if="multipleSelection!=''">下订单</el-button>
     </div>
   </div>
 </template>
@@ -64,25 +66,40 @@
   import ElCheckbox from "../../node_modules/element-ui/packages/checkbox/src/checkbox";
   import ElInputNumber from "../../node_modules/element-ui/packages/input-number/src/input-number";
   import axios from 'axios';
+  import Header from './Header.vue'
   export default{
     components: {
       ElInputNumber,
-      ElCheckbox},
+      ElCheckbox,
+    Header},
     data(){
 
-         return {
-           tableData: [{
-             caid: "",
-             caname: "",
-             oaprice: "",
-             cacount: "1",
-             catotalprice: ""
+      return {
+        tableData: [{
+          caid: "",
+          caname: "",
+          oaprice: "",
+          cacount: "1",
+          catotalprice: ""
 
-           }]
-         }
+        }],
+        multipleSelection: []
+      }
+
       },
-    method(){
+    methods:{
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      getOrders(){
+          axios.post("api/addOrder",this.multipleSelection).then(r=>{
+            if(r.data=='success'){
+                this.$router.push('/order');
+            }
 
+          });
+
+      }
       },
        mounted(){
         axios.get("api/selectCartAll").then(r=>{

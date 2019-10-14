@@ -5,9 +5,13 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
+import vueiInfinite from 'vue-infinite-scroll';
+
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
+Vue.use(vueiInfinite)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
